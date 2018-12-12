@@ -36,9 +36,11 @@ class ULevelUtilityBPLibrary : public UBlueprintFunctionLibrary
 	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"), Category="LevelUtility")
 	static bool GetLevelVisible(const UObject* WorldContextObject, const FName levelName);
 
-	/* レベルのリストを取得 */
 	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"), Category="LevelUtility")
 	static TArray<FName> GetLevelList(const UObject* WorldContextObject);
+
+	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"), Category = "LevelUtility")
+	static TArray<FName> GetLevelListInEditor();
 
 	UFUNCTION(BlueprintCallable, Category = "LevelUtility")
 	static void SetLevelVisibleInEditor(const FName levelName, bool bVisible);

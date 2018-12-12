@@ -111,6 +111,33 @@ TArray<FName> ULevelUtilityBPLibrary::GetLevelList(const UObject* WorldContextOb
 
 }
 
+TArray<FName> ULevelUtilityBPLibrary::GetLevelListInEditor()
+{
+	TArray<FName>result;
+
+#if WITH_EDITOR
+	UWorld* world = nullptr;
+
+	if (GEditor)
+	{
+		world = GEditor->GetEditorWorldContext().World();
+		if (IsValid(world))
+		{
+			for (ULevelStreaming* level : world->GetStreamingLevels())
+			{
+				if (!level->GetWorldAssetPackageFName().IsNone())
+				{
+					result.Add(level->GetWorldAssetPackageFName());
+				}
+
+			}
+		}
+	}
+#endif
+	return result;
+
+}
+
 ULevelStreaming* ULevelUtilityBPLibrary::FindEditorLevel(const FName levelName)
 {
 #if WITH_EDITOR
@@ -144,8 +171,6 @@ void ULevelUtilityBPLibrary::SetLevelVisibleInEditor(const FName levelName, bool
 		{
 			ULevel* levelObject = level->GetLoadedLevel();
 			EditorLevelUtils::SetLevelVisibility(levelObject, bVisible, false);
-
-			levelObject->GetOutermost()->SetDirtyFlag(false);
 		}
 	}
 	else
